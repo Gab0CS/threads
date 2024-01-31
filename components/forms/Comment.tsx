@@ -18,6 +18,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { CommentValidation } from "@/lib/validations/thread";
+import Image from "next/image";
+import { addCommentToThread } from "@/lib/actions/thread.actions";
 
 interface Props {
     threadId: string;
@@ -37,32 +39,37 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
     });
 
     const onSubmit = async (values: z.infer<typeof CommentValidation>) => {
-        // await createThread({
-        //     text: values.thread,
-        //     author: userId, 
-        //     communityId: null, 
-        //     path: pathname
-        // });
+        await addCommentToThread(
+            threadId, 
+            values.thread, 
+            JSON.parse(currentUserId),
+            pathname
+        )
 
-        // router.push("/")
+        form.reset();
     }
     
     return(
         <Form {...form}>
             <form
             onSubmit={form.handleSubmit(onSubmit)} 
-            className="mt-10 flex flex-col justify-start-gap-10"
+            className="comment-form"
              >
                 <FormField
                     control={form.control}
                     name="thread"
                     render={({ field }) => (
-                        <FormItem className='flex flex-col w-full gap-3'>
-                            <FormLabel className='text-base-semibold text-light-2 mt-4'>
-                                Content
+                        <FormItem className='flex items-center w-full gap-3'>
+                            <FormLabel>
+                               <Image 
+                                src={currentUserImg}
+                                alt="current user"
+                                width={48}
+                                height={48}
+                                className="rounded-full object-cover"
+                               />
                             </FormLabel>
-                            <FormControl className='no-focus border 
-                            border-dark-4 bg-dark-3 text-light-1'>
+                            <FormControl className='border-none bg-transparent'>
                                 <Input
                                 type="text"
                                 placeholder="Comment..."
@@ -70,13 +77,13 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
                                 {...field}
                                 />
                             </FormControl>
-                            <FormMessage />
+
                         </FormItem>
                     )}
                 />
 
-                <Button type="submit" className="mt-10  bg-primary-500">
-                    Post Thread
+                <Button type="submit" className="mt-10  comment-form-btn">
+                    Reply
                 </Button>
              </form>
 
