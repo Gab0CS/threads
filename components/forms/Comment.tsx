@@ -82,7 +82,7 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
                     )}
                 />
 
-                <Button type="submit" className="mt-10  comment-form-btn">
+                <Button type="submit" className="mt-10  comment-form_btn">
                     Reply
                 </Button>
              </form>
